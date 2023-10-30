@@ -14,8 +14,9 @@ if(isset($_POST['submit']))
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
     $endereco = $_POST['endereco'];
+    $perfil = $_POST['perfil'];
 
-    $result = mysqli_query($conexao, "INSERT INTO usuario(nome, senha, email, telefone, sexo, data_nasc, cidade, estado,endereco) VALUES ('$nome', '$senha', '$email', '$telefone', '$sexo', '$data_nasc', '$cidade', '$estado', '$endereco') ");
+    $result = mysqli_query($conexao, "INSERT INTO usuario(nome, senha, email, telefone, sexo, data_nasc, cidade, estado,endereco,perfil) VALUES ('$nome', '$senha', '$email', '$telefone', '$sexo', '$data_nasc', '$cidade', '$estado', '$endereco', '$perfil') ");
 
     header('Location: login.php');
 }
@@ -183,6 +184,12 @@ if(isset($_POST['submit']))
                     <label for="endereco" class="labelInput">Endereço</label>
                 </div>
                 <br>
+                <p>Perfil:</p>
+                <input type="radio" name="perfil" id="usuario" value="usuario" required>
+                <label for="usuario">Usuário</label>
+                <input type="radio" name="perfil" id="administrador" value="administrador" required>
+                <label for="administrador">Administrador</label>
+                <br><br>
                 <input type="submit" name="submit" id="submit" value="Cadastrar">
             </fieldset>
         </form>
