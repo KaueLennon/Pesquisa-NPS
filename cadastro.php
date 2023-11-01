@@ -134,9 +134,9 @@ if(isset($_POST['submit']))
 <body>
     <a href="login.php">Voltar</a>
     <div class="box">
-        <form action="Formulario.php" method="POST">
+        <form action="cadastro.php" method="POST">
             <fieldset>
-                <legend><b>Formulário de Clientes</b></legend>
+                <legend><b>Cadastro de Usuário</b></legend>
                 <br>
                 <div class="inputBox">
                     <input type="text" name="nome" id="nome" class="inputUser" required>

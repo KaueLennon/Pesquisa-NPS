@@ -54,6 +54,8 @@
        }
 
        .button-cadastra {
+        display: block;
+        text-align: center;
         background-color: whitesmoke;
         border: none;
         color: black;
@@ -80,7 +82,7 @@
             <br><br>
             <input class="inputSubmit" type="submit" name="submit" value="Entrar">
             <p>Ainda não tem conta?</p>
-            <a href="Formulario.php" class="button-cadastra">Cadastre-se</a>
+            <a href="cadastro.php" class="button-cadastra">Cadastre-se</a>
         </form>
     </div>
 </body>

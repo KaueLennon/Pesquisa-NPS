@@ -7,20 +7,17 @@ if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['senha'])
     $senha = $_POST['senha'];
 
     $sql = "SELECT * FROM usuario WHERE email = '$email' and senha = '$senha'";
-
+    
     $result = $conexao-> query($sql);
-
-    if(mysqli_num_rows($result)<1)
-    {
+    
+    if(mysqli_num_rows($result)<1){
         unset($_SESSION['email']);
         unset($_SESSION['senha']);
         header('Location: login.php');
-    }
-    else
-    {
+    } else {
         $_SESSION['email'] = $email;
         $_SESSION['perfil'] = $perfil;
-        header('Location: pesquisa.php');
+        header('Location: telainicio.php');
     }
 }
 else
