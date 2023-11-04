@@ -1,24 +1,37 @@
 <?php
 
-if(isset($_POST['submit']))
+
+if(!empty($_GET['id']))
 {   
 
     include_once('config.php');
 
-    $nome = $_POST['nome'];
-    $senha = $_POST['senha'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
-    $sexo = $_POST['genero'];
-    $data_nasc = $_POST['data_nascimento'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $endereco = $_POST['endereco'];
-    $perfil = "usuario";
+    $id = $_GET['id'];
 
-    $result = mysqli_query($conexao, "INSERT INTO usuario(nome, senha, email, telefone, sexo, data_nasc, cidade, estado,endereco,perfil) VALUES ('$nome', '$senha', '$email', '$telefone', '$sexo', '$data_nasc', '$cidade', '$estado', '$endereco', '$perfil') ");
+    $sqlSelect = "SELECT * FROM usuario WHERE idusuario=$id";
 
-    header('Location: home.php');
+    $result = $conexao->query($sqlSelect);
+
+    if($result->num_rows > 0)
+    {
+        while($user_data = mysqli_fetch_assoc($result)){
+         
+        $nome = $user_data['nome'];
+        $senha = $user_data['senha'];
+        $email = $user_data['email'];
+        $telefone = $user_data['telefone'];
+        $sexo = $user_data['sexo'];
+        $data_nasc = $user_data['data_nasc'];
+        $cidade = $user_data['cidade'];
+        $estado = $user_data['estado'];
+        $endereco = $user_data['endereco'];
+        $perfil = $user_data['perfil'];  
+        }
+    }
+    else {
+        header('Location: ger_usuario.php');
+    }
+    
 }
 
 ?>
@@ -29,7 +42,7 @@ if(isset($_POST['submit']))
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Cadastro</title>
+    <title>Tela Edição Usuário</title>
     <style>
         body{
             font-family: Arial, Helvetica, sans-serif;
@@ -99,7 +112,7 @@ if(isset($_POST['submit']))
             font-size: 15px;
         }
 
-        #submit{
+        #update{
             width: 100%;
             border-radius: 7px;
             outline: none;
@@ -112,7 +125,7 @@ if(isset($_POST['submit']))
             cursor: pointer;
         }
 
-        #submit:hover{
+        #update:hover{
             background-color: aquamarine;
             color: black;
         }
@@ -132,56 +145,53 @@ if(isset($_POST['submit']))
     </style>
 </head>
 <body>
-    <a href="home.php">Voltar</a>
+    <a href="ger_usuario.php">Voltar</a>
     <div class="box">
-        <form action="cadastro.php" method="POST">
+        <form action="saveEditUsuario.php" method="POST">
             <fieldset>
-                <legend><b>Cadastro de Usuário</b></legend>
+                <legend><b>Editar Usuário</b></legend>
                 <br>
                 <div class="inputBox">
-                    <input type="text" name="nome" id="nome" class="inputUser" required>
+                    <input type="text" name="nome" id="nome" class="inputUser" value="<?php echo $nome ?>" required>
                     <label for="nome" class="labelInput">Nome Completo</label>
                 </div>
                 <br>
                 <div class="inputBox">
-                    <input type="text" name="email" id="email" class="inputUser" required>
+                    <input type="text" name="email" id="email" class="inputUser" value="<?php echo $email ?>" required>
                     <label for="email" class="labelInput">Email</label>
                 </div> 
                 <br>
+                <p>Perfil:</p>
+                <input type="radio" name="perfil" id="usuario" value="usuario" <?Php echo ($perfil == 'usuario') ? 'checked' : '' ?> required>
+                <label for="usuario">Usuário</label>
+                <input type="radio" name="perfil" id="administrador" value="administrador" <?Php echo ($perfil == 'administrador') ? 'checked' : '' ?> required>
+                <label for="administrador">Administrador</label>
+                <br><br>
                 <div class="inputBox">
-                    <input type="password" name="senha" id="senha" class="inputUser" required>
-                    <label for="senha" class="labelInput">Senha</label>
-                </div>
-                <br>
-                <div class="inputBox">
-                    <input type="tel" name="telefone" id="telefone" class="inputUser" required>
+                    <input type="tel" name="telefone" id="telefone" class="inputUser" value="<?php echo $telefone ?>" required>
                     <label for="telefone" class="labelInput">Telefone</label>
                 </div>
                 <br>
                 <p>Sexo:</p>
-                <input type="radio" name="genero" id="feminino" value="feminino" required>
+                <input type="radio" name="genero" id="feminino" value="feminino" <?php echo ($sexo == 'feminino') ? 'checked' : '' ?> required>
                 <label for="feminino">Feminino</label>
-                <input type="radio" name="genero" id="masculino" value="masculino" required>
+                <input type="radio" name="genero" id="masculino" value="masculino" <?php echo ($sexo == 'masculino') ? 'checked' : '' ?> required>
                 <label for="masculino">Masculino</label>
-                <input type="radio" name="genero" id="outros" value="outros" required>
+                <input type="radio" name="genero" id="outros" value="outros" <?php echo ($sexo == 'outros') ? 'checked' : '' ?> required>
                 <label for="outros">Outros</label>
                 <br><br>
                     <label for="data_nascimento"><b>Data de Nascimento</b></label>
-                    <input type="date" name="data_nascimento" id="data_nascimento" required>    
+                    <input type="date" name="data_nascimento" id="data_nascimento" value="<?php echo $data_nasc ?>" required>    
                 <br><br>
                 <div class="inputBox">
-                    <input type="text" name="cidade" id="cidade" class="inputUser" required>
+                    <input type="text" name="cidade" id="cidade" class="inputUser" value="<?php echo $cidade ?>" required>
                     <label for="cidade" class="labelInput">Cidade</label>
                 </div>
                 <br>
-                <!-- <div class="inputBox">
-                    <input type="text" name="estado" id="estado" class="inputUser" required>
-                    <label for="estado" class="labelInput">Estado</label>
-                </div> -->
                 <div class="InputBox">
                 <label for="estado"><b>Estado</b></label>
-                <select name="estado" id="estado" required>
-                    <option value="" disabled selected>Selecione o estado</option>
+                <select name="estado" id="estado" required>  
+                    <option value="<?php echo $estado ?>"><?php echo $estado ?></option>
                     <option value="Acre">Acre</option>
                     <option value="Alagoas">Alagoas</option>
                     <option value="Amapá">Amapá</option>
@@ -213,17 +223,12 @@ if(isset($_POST['submit']))
                 </div>
                 <br>
                 <div class="inputBox">
-                    <input type="text" name="endereco" id="endereco" class="inputUser" required>
+                    <input type="text" name="endereco" id="endereco" class="inputUser" value="<?php echo $endereco ?>" required>
                     <label for="endereco" class="labelInput">Endereço</label>
                 </div>
-                <!-- <br>
-                <p>Perfil:</p>
-                <input type="radio" name="perfil" id="usuario" value="usuario" required>
-                <label for="usuario">Usuário</label>
-                <input type="radio" name="perfil" id="administrador" value="administrador" required>
-                <label for="administrador">Administrador</label> -->
                 <br><br>
-                <input type="submit" name="submit" id="submit" value="Cadastrar">
+                <input type="hidden" name="id" value="<?php echo $id ?>">
+                <input type="submit" name="update" id="update" value="Salvar">
             </fieldset>
         </form>
     </div>

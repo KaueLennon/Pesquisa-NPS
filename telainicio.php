@@ -1,3 +1,33 @@
+<?php
+
+session_start();
+include_once'config.php';
+include_once'autenticacao.php';
+include_once'nomeusuario.php';
+
+$email = $_SESSION['email'];
+
+$sql = "SELECT * FROM usuario WHERE email = '$email'";
+
+$result = $conexao-> query($sql);
+
+// echo $email;
+
+$row = $result->fetch_assoc();
+// $nomeusuario = $row['nome'];
+$perfil = $row['perfil'];
+
+// echo "Ola $nomeusuario";
+
+
+// // Dividir o nome do usuário
+// $nomeCompleto = $nomeusuario;
+// $partesDoNome = explode(" ", $nomeCompleto);
+// $primeiroNome = $partesDoNome[0];
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -117,16 +147,19 @@
         <img src="imagens/menu2.png">
     </label>
     <nav>
-        <ul>
-            <li><a href="">GERENCIAR USUÁRIO</a></li>
-            <li><a href="">GERENCIAR PERGUNTAS</a></li>
-            <li><a href="">EXPORTAR DADOS</a></li>
+        <ul><?php 
+            if($perfil === 'administrador'){
+                echo '<li><a href="ger_usuario.php">GERENCIAR USUÁRIO</a></li>';
+                echo '<li><a href="">GERENCIAR PERGUNTAS</a></li>';
+                echo '<li><a href="">EXPORTAR DADOS</a></li>';
+            }
+            ?>
             <li><a href="sair.php">SAIR</a></li>
         </ul>
     </nav>
     <h1 class="titulo_superior">Pesquisa NPS 3R</h1>
     <div class="tela">
-        <h2 class="titulo_1">Para iniciar a pesquisa, clique abaixo:</h1>
+        <h2 class="titulo_1">Olá <?php echo $primeiroNome ?>, para iniciar a pesquisa clique no botão abaixo:</h1>
         <a class="botaoIniciarPesq" href="pesquisa.php">PESQUISA</a>
     </div>
 </body>

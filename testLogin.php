@@ -13,7 +13,7 @@ if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['senha'])
     if(mysqli_num_rows($result)<1){
         unset($_SESSION['email']);
         unset($_SESSION['senha']);
-        header('Location: login.php');
+        header('Location: home.php');
     } else {
         $_SESSION['email'] = $email;
         $_SESSION['perfil'] = $perfil;
@@ -22,7 +22,7 @@ if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['senha'])
 }
 else
 {
-header(('Location: login.php'));
+header(('Location: home.php'));
 }
 
 ?>
