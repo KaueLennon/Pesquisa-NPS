@@ -7,7 +7,7 @@
 
         $cod_pesquisa = time();
 
-        $sql = "SELECT * FROM pergunta";
+        $sql = "SELECT * FROM pergunta ORDER BY sequencia";
 
         $result = $conexao-> query($sql)->fetch_all(PDO::FETCH_ASSOC);
 
@@ -20,20 +20,28 @@
         // echo "<br>";
 
 
-    if(count($_POST) == count($result)){
+        if(count($_POST) == count($result)){
     
-        $stmt = $conexao->prepare("INSERT INTO resposta (resposta, user, fk_pergunta,cod_pesquisa, data_pesquisa) VALUES (?, ?, ?, ?, NOW())");
-        $stmt->bind_param("isid",$resposta, $user, $fk_pergunta, $cod_pesquisaa);
-        for($i=1; $i<count($_POST)+1;$i++){
-            $resposta = $_POST['pergunta'.$i];
-        $user = $logado;
-        $fk_pergunta = $i;
-        $cod_pesquisaa = $cod_pesquisa;
-        $stmt->execute();
+            $stmt = $conexao->prepare("INSERT INTO resposta (resposta, user, fk_pergunta,cod_pesquisa, data_pesquisa) VALUES (?, ?, ?, ?, NOW())");
+            $stmt->bind_param("isid",$resposta, $user, $fk_pergunta, $cod_pesquisaa);
+            
+            foreach ($result as $arr_result) {
+                $resposta = $_POST['pergunta'.$arr_result[2]];
+                $user = $logado;
+                $fk_pergunta = $arr_result[0];
+                $cod_pesquisaa = $cod_pesquisa;
+                $stmt->execute();
+            }
+    
+                // for($i=1; $i<count($_POST)+1;$i++){
+                // $resposta = $_POST['pergunta'.$i];
+                // $user = $logado;
+                // $fk_pergunta = $arr_result[0];
+                // $cod_pesquisaa = $cod_pesquisa;
+                // $stmt->execute();
+                // }
+            header('Location: encerramento.php');
         }
-
-        header('Location: encerramento.php');
-    }
     ?>
 
     <!DOCTYPE html>
@@ -52,6 +60,7 @@
         body {
         font-family: Arial, Helvetica, sans-serif;
         background-image: linear-gradient(45deg, #3C7FE8, #16e7c4);
+        height: auto;
         }
 
         .container1{
@@ -86,7 +95,79 @@
             height: 100%;
         }
 
+        .pesquisa{
+            display: flex;
+            margin: 20px;
+            margin-left: 50px;
+        }
 
+        .pesquisa_1{
+            margin: 15px;
+            margin-top: 15px;
+        }
+
+        p{
+            font-size: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 15px;
+            border: 2px solid black;
+            width: 750px;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        .inputSubmit{
+        background-color: #2C55F5;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        font-size: 20px;
+        padding: 13px;
+        width: 125px;
+        border: 1px solid black;
+       }
+
+       .inputSubmit:hover{
+        background-color: deepskyblue;
+        cursor: pointer;
+       }
+
+       .titulo_perg{
+        color: black;
+       }
+
+       .r_fechada{
+        font-size: 16px;
+        background-color: black;
+        color: white;
+        border-radius: 10px;
+        padding: 3px;
+        margin: 2px;
+        display: inline-block; 
+        cursor: pointer;
+       }
+
+       .r_fechada:hover{
+        background-color: #852CF5;
+       }
+
+
+       .r_aberta{
+        font-family: Verdana, sans-serif;
+        font-size: 12px;
+        padding: 10px;
+        background-color: white;
+        border-radius: 15px;
+        border: none;
+        width: 650px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+        outline: none;
+       }
+
+
+       
         </style>
     </head>
     <body>
@@ -99,30 +180,31 @@
             <a href="sair.php" class="botaosair">Sair</a>
         </div>
         
-        <form action="" method= "POST">
-            <?php 
-                $respostaOrdem = 0;
-            foreach($result as $arr_result){
-                $respostaOrdem = $respostaOrdem +1; ?>
-                <p><?="Pergunta " . $arr_result[2] . ": ". $arr_result[1] ?></p>
-                <label for="pergunta<?= $respostaOrdem ?>">
-                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="1" id="pergunta<?= $respostaOrdem ?>"> 1
-                </label>
-                <label for="pergunta<?= $respostaOrdem ?>">
-                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="2" id="pergunta<?= $respostaOrdem ?>"> 2
-                </label>
-                <label for="pergunta<?= $respostaOrdem ?>">
-                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="3" id="pergunta<?= $respostaOrdem ?>"> 3
-                </label>
-                <label for="pergunta<?= $respostaOrdem ?>">
-                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="4" id="pergunta<?= $respostaOrdem ?>"> 4
-                </label>
-                <label for="pergunta<?= $respostaOrdem ?>">
-                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="5" id="pergunta<?= $respostaOrdem ?>"> 5
-                </label>
-            <?php }?>
-            <br><br>
-            <input type="submit" value="Enviar">
-        </form>
+        <div class="pesquisa">
+            <form action="" method= "POST">
+                    <?php 
+                        $respostaOrdem = 0;
+                        foreach($result as $arr_result){
+                            $respostaOrdem = $respostaOrdem +1; ?>
+                            <p><strong class="titulo_perg"><?="Pergunta " . $arr_result[2] ?></strong><?= ": ". $arr_result[1] ?></p>
+                            <?php
+                            if($arr_result[3]==='FECHADA'){
+                                for($i=1;$i<6;$i++){ ?>
+                                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="<?= $i ?>" id="pergunta<?= $respostaOrdem ?>_<?= $i ?>">
+                                    <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>_<?= $i ?>"><?= $i ?></label>
+                                <?php }?> 
+                            <?php }elseif($arr_result[3]=== 'ABERTA'){ ?> 
+                                <textarea class="r_aberta" name="pergunta<?= $respostaOrdem ?>" id="pergunta<?= $respostaOrdem ?>" rows="3" cols="50"></textarea>  
+                                    <?php } else { ?> 
+                                        <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="sim" id="pergunta<?= $respostaOrdem ?>">
+                                        <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>">Sim</label>
+                                        <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="nao" id="pergunta<?= $respostaOrdem ?>">
+                                        <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>">Não</label>
+                                        <?php } ?>       
+                    <?php }?>
+                <br><br>    
+                <input class="inputSubmit" type="submit" value="Enviar">
+            </form>
+        </div>
     </body>
     </html>

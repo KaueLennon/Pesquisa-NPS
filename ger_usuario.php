@@ -6,12 +6,13 @@ include_once('autenticacao.php');
 include_once('testAdmin.php');
 include_once('nomeusuario.php');
 
+
 if(!empty($_GET['search'])){
   $nomesearch = $_GET['search'];
   $sql = "SELECT * FROM usuario WHERE nome LIKE '%$nomesearch%' or email LIKE '%$nomesearch%' ORDER BY nome ASC";
 }
 else {
-  $sql = "SELECT * FROM usuario ORDER BY nome ASC";
+  $sql = "SELECT * FROM usuario WHERE nome = ''";
 }
 
 $result = $conexao->query($sql);
@@ -32,6 +33,7 @@ $result = $conexao->query($sql);
               font-family: Arial, Helvetica, sans-serif;
               background-image: linear-gradient(45deg, #3C7FE8, #16e7c4);
               font-size: 15px;
+              height: 100vh;
               
         }
 
@@ -95,7 +97,7 @@ $result = $conexao->query($sql);
         </svg>
       </button>
     </div>
-    <div class="m-5">
+    <div class="m-3">
       <table class="table table-striped table-hover ">
           <thead>
               <tr>

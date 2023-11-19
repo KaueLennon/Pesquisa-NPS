@@ -42,6 +42,7 @@ $perfil = $row['perfil'];
         body{
             font-family: Arial, Helvetica, sans-serif;
             background-image: linear-gradient(45deg, #3C7FE8, #16e7c4);
+            height: 100vh;
         }
 
         .titulo_superior {
@@ -150,8 +151,8 @@ $perfil = $row['perfil'];
         <ul><?php 
             if($perfil === 'administrador'){
                 echo '<li><a href="ger_usuario.php">GERENCIAR USUÁRIO</a></li>';
-                echo '<li><a href="">GERENCIAR PERGUNTAS</a></li>';
-                echo '<li><a href="">EXPORTAR DADOS</a></li>';
+                echo '<li><a href="ger_pergunta.php">GERENCIAR PERGUNTAS</a></li>';
+                echo '<li><a href="gerar_planilha.php">EXPORTAR DADOS</a></li>';
             }
             ?>
             <li><a href="sair.php">SAIR</a></li>
