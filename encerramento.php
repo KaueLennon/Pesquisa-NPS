@@ -15,8 +15,10 @@ unset($_SESSION['senha']);
 
     <style>
         body {
+            background-image: url('imagens/encerramento.jpeg'); /* Caminho da imagem de fundo */
+            background-size: cover; /* Ajusta o tamanho da imagem */
+            background-position: center; /* Centraliza a imagem */
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             color: #333;
             margin: 0;
             padding: 0;
@@ -28,11 +30,15 @@ unset($_SESSION['senha']);
         }
 
         h1 {
-            color: #4285f4; /* Cor do Google */
+            color: white;
+            font-size: 100px;
+            margin-top: -70px;
         }
 
         h3 {
-            margin-top: 20px;
+            color: white;
+            font-size: 40px;
+            margin-top: -20px;
             font-size: 18px;
         }
     </style>

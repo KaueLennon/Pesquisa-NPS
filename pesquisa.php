@@ -1,4 +1,4 @@
-    <?php
+<?php
         session_start();
         include_once 'config.php';
         include_once 'autenticacao.php';
@@ -23,7 +23,7 @@
         if(count($_POST) == count($result)){
     
             $stmt = $conexao->prepare("INSERT INTO resposta (resposta, user, fk_pergunta,cod_pesquisa, data_pesquisa) VALUES (?, ?, ?, ?, NOW())");
-            $stmt->bind_param("isid",$resposta, $user, $fk_pergunta, $cod_pesquisaa);
+            $stmt->bind_param("ssid",$resposta, $user, $fk_pergunta, $cod_pesquisaa);
             
             foreach ($result as $arr_result) {
                 $resposta = $_POST['pergunta'.$arr_result[2]];
@@ -97,6 +97,7 @@
 
         .pesquisa{
             display: flex;
+            justify-content: center;
             margin: 20px;
             margin-left: 50px;
         }
@@ -126,6 +127,7 @@
         padding: 13px;
         width: 125px;
         border: 1px solid black;
+        margin-left: 40%;;
        }
 
        .inputSubmit:hover{
@@ -166,8 +168,23 @@
         outline: none;
        }
 
+       input[type="radio"]:checked + label {
+        font-size: 18px;
+        background-color: #852CF5;
+        border: 2px solid white;
+        }
 
-       
+    /* Estilo opcional para melhorar a aparência da seleção */
+        input[type="radio"] {
+        display: none; /* Esconder o botão de rádio padrão */
+        }
+
+        fieldset{
+            margin-top: 10px;
+            padding: 10px;
+            border: 2px groove LightGray;
+        }
+        
         </style>
     </head>
     <body>
@@ -186,21 +203,23 @@
                         $respostaOrdem = 0;
                         foreach($result as $arr_result){
                             $respostaOrdem = $respostaOrdem +1; ?>
-                            <p><strong class="titulo_perg"><?="Pergunta " . $arr_result[2] ?></strong><?= ": ". $arr_result[1] ?></p>
-                            <?php
-                            if($arr_result[3]==='FECHADA'){
-                                for($i=1;$i<6;$i++){ ?>
-                                    <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="<?= $i ?>" id="pergunta<?= $respostaOrdem ?>_<?= $i ?>">
-                                    <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>_<?= $i ?>"><?= $i ?></label>
-                                <?php }?> 
-                            <?php }elseif($arr_result[3]=== 'ABERTA'){ ?> 
-                                <textarea class="r_aberta" name="pergunta<?= $respostaOrdem ?>" id="pergunta<?= $respostaOrdem ?>" rows="3" cols="50"></textarea>  
-                                    <?php } else { ?> 
-                                        <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="sim" id="pergunta<?= $respostaOrdem ?>">
-                                        <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>">Sim</label>
-                                        <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="nao" id="pergunta<?= $respostaOrdem ?>">
-                                        <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>">Não</label>
-                                        <?php } ?>       
+                            <fieldset>
+                                <p><strong class="titulo_perg"><?="Pergunta " . $arr_result[2] ?></strong><?= ": ". $arr_result[1] ?></p>
+                                <?php
+                                if($arr_result[3]==='FECHADA'){
+                                    for($i=1;$i<6;$i++){ ?>
+                                        <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="<?= $i ?>" id="pergunta<?= $respostaOrdem ?>_<?= $i ?>">
+                                        <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>_<?= $i ?>"><?= $i ?></label>
+                                    <?php }?> 
+                                <?php }elseif($arr_result[3]=== 'ABERTA'){ ?> 
+                                    <textarea class="r_aberta" name="pergunta<?= $respostaOrdem ?>" id="pergunta<?= $respostaOrdem ?>" rows="3" cols="50"></textarea>  
+                                        <?php } else { ?> 
+                                            <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="Sim" id="pergunta<?= $respostaOrdem ?>_Sim">
+                                            <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>_Sim">Sim</label>
+                                            <input type="radio" name="pergunta<?= $respostaOrdem ?>" value="Não" id="pergunta<?= $respostaOrdem ?>_Não">
+                                            <label class="r_fechada" for="pergunta<?= $respostaOrdem ?>_Não">Não</label>
+                                            <?php } ?>  
+                            </fieldset>     
                     <?php }?>
                 <br><br>    
                 <input class="inputSubmit" type="submit" value="Enviar">
